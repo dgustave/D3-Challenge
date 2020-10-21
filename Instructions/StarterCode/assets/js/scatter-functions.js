@@ -117,36 +117,36 @@ function renderXAxes(newXScale, xAxis) {
       ypercentsign = "%";
     }
   
-//     const toolTip = d3.tip()
-//       .attr("class", "d3-tip")
-//       .offset([50, -75])
-//       .html(function(d) {
-//         if (chosenXAxis === "income"){
-//           let incomelevel = formatter.format(d[chosenXAxis]);
+    const toolTip = d3.tip()
+      .attr("class", "d3-tip")
+      .offset([50, -75])
+      .html(function(d) {
+        if (chosenXAxis === "income"){
+          let incomelevel = formatter.format(d[chosenXAxis]);
   
-//           return (`${d.state}<br>${xlabel}: ${incomelevel.substring(0, incomelevel.length-3)}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
-//         } else {
-//           return (`${d.state}<br>${xlabel}: ${d[chosenXAxis]}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
-//         };
-//       });
+          return (`${d.state}<br>${xlabel}: ${incomelevel.substring(0, incomelevel.length-3)}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
+        } else {
+          return (`${d.state}<br>${xlabel}: ${d[chosenXAxis]}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
+        };
+      });
   
-//     circlesGroup.call(toolTip);
+    circlesGroup.call(toolTip);
   
-//     // mouseover event
-//     circlesGroup.on("mouseover", function(data) {
-//         toolTip.show(data, this);
-//         // trying to highlight chosen circle
-//         // circlesGroup.append("circle")
-//         //   .attr("cx", d3.event.pageX)
-//         //   .attr("cy", d3.event.pageY)
-//         //   .attr("r", 15)
-//         //   .attr("stroke", "black")
-//         //   .attr("fill", "none");
-//     })
-//       // onmouseout event
-//       .on("mouseout", function(data) {
-//           toolTip.hide(data, this);
-//       });
+    // mouseover event
+    circlesGroup.on("mouseover", function(data) {
+        toolTip.show(data, this);
+        // trying to highlight chosen circle
+        // circlesGroup.append("circle")
+        //   .attr("cx", d3.event.pageX)
+        //   .attr("cy", d3.event.pageY)
+        //   .attr("r", 15)
+        //   .attr("stroke", "black")
+        //   .attr("fill", "none");
+    })
+      // onmouseout event
+      .on("mouseout", function(data) {
+          toolTip.hide(data, this);
+      });
   
   return circlesGroup;
   }

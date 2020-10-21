@@ -1,0 +1,21 @@
+{
+  "name": "D3-CHALLENGE",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgustave/D3-Challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dgustave/D3-Challenge/issues"
+  },
+  "homepage": "https://github.com/dgustave/D3-Challenge#readme"
+}

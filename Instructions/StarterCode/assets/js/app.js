@@ -1,3 +1,8 @@
+import * as DropdownMenu from './dropdownMenu'; 
+import * as Scatterfx from './scatter-functions';
+DropdownMenu.dropdownMenu(select('#scatter'), {
+  options: []
+});
 // @TODO: YOUR CODE HERE!
 var svgWidth = 960;
 var svgHeight = 500;
@@ -45,8 +50,8 @@ let chosenYAxis = "healthcare";
 });
 
   // Initialize scale functions
-  let xLinearScale = xScale(healthData, chosenXAxis);
-  let yLinearScale = yScale(healthData, chosenYAxis);
+  let xLinearScale = Scatterfx.xScale(healthData, chosenXAxis);
+  let yLinearScale = Scatterfx.yScale(healthData, chosenYAxis);
 
   // Initialize axis functions:
   // This function returns the created bottom horizontal axis
@@ -132,75 +137,73 @@ let chosenYAxis = "healthcare";
    .text("Obese (%)")
    .classed("inactive", true);
 
-    // updateToolTip function above csv import
-  circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-    // x axis labels event listener
-    xlabelsGroup.selectAll("text")
-    .on("click", function() {
-      // get value of selection
-      var value = d3.select(this).attr("value");
-      if (value !== chosenXAxis) {
+    // initial tooltips
+ circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
 
-        // replaces chosenXAxis with value
-        chosenXAxis = value;
+ // x axis labels event listener
+ xlabelsGroup.selectAll("text")
+   .on("click", function() {
+   // get value of selection
+   const value = d3.select(this).attr("value");
+   if (value !== chosenXAxis) {
 
-        // console.log(chosenXAxis)
+     // replaces chosenXAxis with value
+     chosenXAxis = value;
 
-        // functions here found above csv import
-        // updates x scale for new data
-        xLinearScale = xScale(healthData, chosenXAxis);
+     // updates x scale for new data
+     xLinearScale = Scatterfx.xScale(healthData, chosenXAxis);
 
-        // updates x axis with transition
-        xAxis = renderAxes(xLinearScale, xAxis);
-        if (chosenXAxis === "age") {
-          albumsLabel
-            .classed("active", true)
-            .classed("inactive", false);
-          hairLengthLabel
-            .classed("active", false)
-            .classed("inactive", true);
-        }
-        else {
-          albumsLabel
-            .classed("active", false)
-            .classed("inactive", true);
-          hairLengthLabel
-            .classed("active", true)
-            .classed("inactive", false);
-        }
-        // change text 
-        //change data for circles x
-        // change labels and scales 
+     // updates x axis with transition
+     xAxis = Scatterfx.renderXAxes(xLinearScale, xAxis);
 
+     // updates circles with new x values
+     circlesXY = renderXCircles(circlesXY, xLinearScale, chosenXAxis);
 
+     // updates circles text with new x values
+     circlesText = renderXText(circlesText, xLinearScale, chosenXAxis);
 
-      }
-    });
-    // ylabelsGroup.selectAll("text")
-    // .on("click", function() {
-    //   // get value of selection
-    //   var value = d3.select(this).attr("value");
-    //   if (value !== chosenYAxis) {
+     // updates tooltips with new info
+     circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
 
-    //     // replaces chosenXAxis with value
-    //     chosenYAxis = value;
+     // changes classes to change bold text
+     if (chosenXAxis === "age") {
+       povertyLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       ageLabel
+         .classed("active", true)
+         .classed("inactive", false);
+       incomeLabel
+         .classed("active", false)
+         .classed("inactive", true);
+     }
+     else if (chosenXAxis === "income") {
+       povertyLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       ageLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       incomeLabel
+         .classed("active", true)
+         .classed("inactive", false);
+     }
+     else {
+       povertyLabel
+         .classed("active", true)
+         .classed("inactive", false);
+       ageLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       incomeLabel
+         .classed("active", false)
+         .classed("inactive", true);
+     }
+   }
+ });
 
-    //     // console.log(chosenXAxis)
+    
 
-    //     // functions here found above csv import
-    //     // updates x scale for new data
-    //     yLinearScale = xScale(healthData, chosenYAxis);
-
-    //     // updates x axis with transition
-    //     xAxis = renderAxes(yLinearScale, yAxis);
-    //     // change text 
-    //     //change data for circles x and y 
-    //     // change labels and scales 
-
-
-
-    //   }
-    });
 
 })()
 
