@@ -25,28 +25,42 @@ var svg = d3.select("#scatter")
 let chosenXAxis = "poverty";
 let chosenYAxis = "healthcare";
 
-// Import Data
+// Async functions retrieve information that does not have its own storage, but finds the nested data by constulting random storages.
 (async function(){
 
-    // Wait until data is imported
+    // Wait until you find the data then import it 
    const healthData = await d3.csv("assets/data/data.csv");
-   console.log(healthData)
-    // .then(function(healthData) {
-    // Step 1: Parse Data/Cast as numbers
-    // ==============================
+   // Pull data for specified fields
     healthData.forEach(function(data) {
-        data.id         = +data.id;
-        data.state      = +data.state; 
-        data.abbr       = +data.abbr; 
-        data.poverty    = +data.poverty;
-        data.healthcare = +data.healthcare;
-        data.age        = +data.age;
-        data.smokes     = +data.smokes;
-        data.obesity    = +data.obesity;
-        data.income     = +data.income;
-        console.log(data.poverty)
-
+      // Parse Data/Cast as numbers
+      data.id         = +data.id;
+      data.state      = +data.state; 
+      data.abbr       = +data.abbr; 
+      data.poverty    = +data.poverty;
+      data.healthcare = +data.healthcare;
+      data.age        = +data.age;
+      data.smokes     = +data.smokes;
+      data.obesity    = +data.obesity;
+      data.income     = +data.income;
+      console.log(data.age)
 });
+
+  // Initialize scale functions
+  let xLinearScale = xScale(healthData, chosenXAxis);
+  let yLinearScale = yScale(healthData, chosenYAxis);
+
+  // Initialize axis functions
+  let bottomAxis = d3.axisBottom(xLinearScale);
+  let leftAxis = d3.axisLeft(yLinearScale);
+
+   // Append x and y axes to the chart
+   let xAxis = chartGroup.append("g")
+   .attr("transform", `translate(0, ${height})`)
+   .call(bottomAxis);
+
+ let yAxis = chartGroup.append("g")
+   .call(leftAxis);
+
 
 })()
 
