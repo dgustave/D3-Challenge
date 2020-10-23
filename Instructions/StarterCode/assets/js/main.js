@@ -1,31 +1,21 @@
-import * as DropdownMenu from './dropdownMenu'; 
-import * as Scatterfx from './scatter-functions';
-DropdownMenu.dropdownMenu(select('#scatter'), {
-  options: []
-});
-// @TODO: YOUR CODE HERE!
-var svgWidth = 960;
-var svgHeight = 500;
+// import {select} from './d3';
+// import * as Dropdown from './dropdown.js'; 
+import * as Scatter from './scatter.js';
 
-var margin = {
-  top: 20,
-  right: 40,
-  bottom: 60,
-  left: 100
-};
+// Dropdown.dropdownMenu(select('body'), {
+//   options: ["poverty", "age", "income" ]
+// });
 
-var width = svgWidth - margin.left - margin.right;
-var height = svgHeight - margin.top - margin.bottom;
 
 // You need to create a scatter plot between two of the data variables such as `Healthcare vs. Poverty` or `Smokers vs. Age`.
 // Create an SVG wrapper to id = "scatter", append an SVG group that will hold our chart, and shift the latter by left and top margins
 var svg = d3.select("#scatter")
   .append("svg")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight);
+  .attr("width", Scatter.svgWidth)
+  .attr("height", Scatter.svgHeight);
 
   var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+  .attr("transform", `translate(${Scatter.margin.left}, ${Scatter.margin.top})`);
   // Initial Params
 let chosenXAxis = "poverty";
 let chosenYAxis = "healthcare";
@@ -50,8 +40,8 @@ let chosenYAxis = "healthcare";
 });
 
   // Initialize scale functions
-  let xLinearScale = Scatterfx.xScale(healthData, chosenXAxis);
-  let yLinearScale = Scatterfx.yScale(healthData, chosenYAxis);
+  let xLinearScale = Scatter.xScale(healthData, chosenXAxis);
+  let yLinearScale = Scatter.yScale(healthData, chosenYAxis);
 
   // Initialize axis functions:
   // This function returns the created bottom horizontal axis
@@ -61,7 +51,7 @@ let chosenYAxis = "healthcare";
 
    // Append x and y axes to the chart then set 
   let xAxis = chartGroup.append("g")
-   .attr("transform", `translate(0, ${height})`)
+   .attr("transform", `translate(0, ${Scatter.height})`)
    .call(bottomAxis);
 
  let yAxis = chartGroup.append("g")
@@ -87,7 +77,7 @@ let chosenYAxis = "healthcare";
 
  // Create group for 3 x-axis labels
  const xlabelsGroup = chartGroup.append("g")
-   .attr("transform", `translate(${width / 2}, ${height})`);
+   .attr("transform", `translate(${Scatter.width / 2}, ${Scatter.height})`);
 
  const povertyLabel = xlabelsGroup.append("text")
    .attr("x", 0)
@@ -115,7 +105,7 @@ let chosenYAxis = "healthcare";
 
  const healthcareLabel = ylabelsGroup.append("text")
    .attr("transform", "rotate(-90)")
-   .attr("x", -(height / 2))
+   .attr("x", -(Scatter.height / 2))
    .attr("y", -40)
    .attr("value", "healthcare") // value to grab for event listener
    .text("Lacks Healthcare (%)")
@@ -123,7 +113,7 @@ let chosenYAxis = "healthcare";
 
  const smokesLabel = ylabelsGroup.append("text")
    .attr("transform", "rotate(-90)")
-   .attr("x", -(height / 2))
+   .attr("x", -(Scatter.height / 2))
    .attr("y", -60)
    .attr("value", "smokes") // value to grab for event listener
    .text("Smokes (%)")
@@ -131,14 +121,14 @@ let chosenYAxis = "healthcare";
 
  const obeseLabel = ylabelsGroup.append("text")
    .attr("transform", "rotate(-90)")
-   .attr("x", -(height / 2))
+   .attr("x", -(Scatter.height / 2))
    .attr("y", -80)
    .attr("value", "obesity") // value to grab for event listener
    .text("Obese (%)")
    .classed("inactive", true);
 
     // initial tooltips
- circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
+ circlesGroup = Scatter.updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
 
  // x axis labels event listener
  xlabelsGroup.selectAll("text")
@@ -151,19 +141,19 @@ let chosenYAxis = "healthcare";
      chosenXAxis = value;
 
      // updates x scale for new data
-     xLinearScale = Scatterfx.xScale(healthData, chosenXAxis);
+     xLinearScale = Scatter.xScale(healthData, chosenXAxis);
 
      // updates x axis with transition
-     xAxis = Scatterfx.renderXAxes(xLinearScale, xAxis);
+     xAxis = Scatter.renderXAxes(xLinearScale, xAxis);
 
      // updates circles with new x values
-     circlesXY = renderXCircles(circlesXY, xLinearScale, chosenXAxis);
+     circlesXY = Scatter.renderXCircles(circlesXY, xLinearScale, chosenXAxis);
 
      // updates circles text with new x values
-     circlesText = renderXText(circlesText, xLinearScale, chosenXAxis);
+     circlesText = Scatter.renderXText(circlesText, xLinearScale, chosenXAxis);
 
      // updates tooltips with new info
-     circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
+     circlesGroup = Scatter.updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
 
      // changes classes to change bold text
      if (chosenXAxis === "age") {
@@ -201,11 +191,74 @@ let chosenYAxis = "healthcare";
      }
    }
  });
+ 
+  // y axis labels event listener
+ ylabelsGroup.selectAll("text")
+   .on("click", function() {
+   // get value of selection
+   const value = d3.select(this).attr("value");
+   if (value !== chosenYAxis) {
+
+     // replaces chosenYAxis with value
+     chosenYAxis = value;
+
+     // updates y scale for new data
+     yLinearScale = Scatter.yScale(healthData, chosenYAxis);
+
+     // updates y axis with transition
+     yAxis = Scatter.renderYAxes(yLinearScale, yAxis);
+
+     // updates circles with new y values
+     circlesXY = Scatter.renderYCircles(circlesXY, yLinearScale, chosenYAxis);
+
+     // updates circles text with new y values
+     circlesText = Scatter.renderYText(circlesText, yLinearScale, chosenYAxis);
+
+     // updates tooltips with new info
+     circlesGroup = Scatter.updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
+
+     // changes classes to change bold text
+     if (chosenYAxis === "smokes") {
+       healthcareLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       smokesLabel
+         .classed("active", true)
+         .classed("inactive", false);
+       obeseLabel
+         .classed("active", false)
+         .classed("inactive", true);
+     }
+     else if (chosenYAxis === "obesity"){
+       healthcareLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       smokesLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       obeseLabel
+         .classed("active", true)
+         .classed("inactive", false);
+     }
+     else {
+       healthcareLabel
+         .classed("active", true)
+         .classed("inactive", false);
+       smokesLabel
+         .classed("active", false)
+         .classed("inactive", true);
+       obeseLabel
+         .classed("active", false)
+         .classed("inactive", true);
+     }
+   }
+ });
 
     
 
 
 })()
+export {chosenXAxis, chosenYAxis}
 
  
 

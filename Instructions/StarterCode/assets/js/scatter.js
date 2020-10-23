@@ -1,3 +1,20 @@
+import {chosenXAxis, chosenYAxis} from './main.js';
+// import {select} from 'd3';
+// import d3Tip from "d3-tip";
+// @TODO: YOUR CODE HERE!
+var svgWidth = 960;
+var svgHeight = 500;
+
+var margin = {
+  top: 20,
+  right: 40,
+  bottom: 60,
+  left: 100
+};
+
+var width = svgWidth - margin.left - margin.right;
+var height = svgHeight - margin.top - margin.bottom;
+
 // function used for updating x-scale const upon click on axis label
 function xScale(scatterData, chosenXAxis) {
     // create scales
@@ -116,25 +133,33 @@ function renderXAxes(newXScale, xAxis) {
       ylabel = "Obesity";
       ypercentsign = "%";
     }
+    // d3.select("class", "d3-tip")
+       // Step 1: Append tooltip div
+       var toolTip = d3.select("#scatter")
+       .append("div")
+       .classed("d3-tip", true);
+
+    // let toolTip = d3.select("body").append("div")
+    // .attr("class", "d3-tip")
+    // toolTip.offset([50, -75])
+    //   toolTip.html(function(d) {
+    //     console.log(d.state)
+    //     if (chosenXAxis === "income"){
+    //       let incomelevel = formatter.format(d[chosenXAxis]);
+    //       return (`${d.state}<br>${xlabel}: ${incomelevel.substring(0, incomelevel.length-3)}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
+    //     }
+    //     else {
+    //       return (`${d.state}<br>${xlabel}: ${d[chosenXAxis]}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
+    //     };
+    //   });
   
-    const toolTip = d3.tip()
-      .attr("class", "d3-tip")
-      .offset([50, -75])
-      .html(function(d) {
-        if (chosenXAxis === "income"){
-          let incomelevel = formatter.format(d[chosenXAxis]);
-  
-          return (`${d.state}<br>${xlabel}: ${incomelevel.substring(0, incomelevel.length-3)}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
-        } else {
-          return (`${d.state}<br>${xlabel}: ${d[chosenXAxis]}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`)
-        };
-      });
-  
-    circlesGroup.call(toolTip);
+    // circlesGroup.call(toolTip);
+    // circlesGroup.append("d3-tip");
   
     // mouseover event
     circlesGroup.on("mouseover", function(data) {
-        toolTip.show(data, this);
+      toolTip.style("display", "none");
+        // toolTip.show(data, this);
         // trying to highlight chosen circle
         // circlesGroup.append("circle")
         //   .attr("cx", d3.event.pageX)
@@ -145,9 +170,11 @@ function renderXAxes(newXScale, xAxis) {
     })
       // onmouseout event
       .on("mouseout", function(data) {
-          toolTip.hide(data, this);
+        toolTip.style("display", "none");
+          // toolTip.hide(data, this);
       });
   
   return circlesGroup;
   }
+  export {xScale, renderXAxes, renderXCircles, renderXText,  yScale, renderYAxes, renderYCircles, renderYText, updateToolTip, svgHeight, svgWidth, width, height, margin}
   

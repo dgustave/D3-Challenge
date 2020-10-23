@@ -1,9 +1,9 @@
 {
-  "name": "D3-CHALLENGE",
+  "name": "js",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
   "type": "module",
+  "description": "",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,8 +12,8 @@
     "url": "git+https://github.com/dgustave/D3-Challenge.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Donley Gustave",
+  "license": "Gustave LLC",
   "bugs": {
     "url": "https://github.com/dgustave/D3-Challenge/issues"
   },
