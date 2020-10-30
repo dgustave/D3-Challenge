@@ -1,4 +1,4 @@
-// import {select} from './d3';
+// import * as d3 from './d3';
 // import * as Dropdown from './dropdown.js'; 
 import * as Scatter from './scatter.js';
 
@@ -26,7 +26,7 @@ let chosenYAxis = "healthcare";
     // Wait until you find the data then import it 
    const healthData = await d3.csv("assets/data/data.csv");
    // Pull data for specified fields
-    healthData.forEach(function(data) {
+   healthData.forEach(function(data) {
       // Parse Data/Cast as numbers
       data.poverty    = +data.poverty;
       data.healthcare = +data.healthcare;
@@ -37,7 +37,8 @@ let chosenYAxis = "healthcare";
       // checking my points 
       console.log({"Poverty": data.poverty})
       console.log({"Healthcare": data.healthcare})
-});
+
+    });
 
   // Initialize scale functions
   let xLinearScale = Scatter.xScale(healthData, chosenXAxis);
@@ -128,7 +129,7 @@ let chosenYAxis = "healthcare";
    .classed("inactive", true);
 
     // initial tooltips
- circlesGroup = Scatter.updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
+ circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
 
  // x axis labels event listener
  xlabelsGroup.selectAll("text")
@@ -153,7 +154,7 @@ let chosenYAxis = "healthcare";
      circlesText = Scatter.renderXText(circlesText, xLinearScale, chosenXAxis);
 
      // updates tooltips with new info
-     circlesGroup = Scatter.updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
+     circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
 
      // changes classes to change bold text
      if (chosenXAxis === "age") {
@@ -215,7 +216,7 @@ let chosenYAxis = "healthcare";
      circlesText = Scatter.renderYText(circlesText, yLinearScale, chosenYAxis);
 
      // updates tooltips with new info
-     circlesGroup = Scatter.updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
+     circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
 
      // changes classes to change bold text
      if (chosenYAxis === "smokes") {
@@ -253,13 +254,99 @@ let chosenYAxis = "healthcare";
      }
    }
  });
-
-    
-
-
 })()
+
+  // function used for updating circles group with new tooltip
+  function updateToolTip(circlesGroup, chosenXAxis, chosenYAxis) {
+  
+    let xpercentsign = "";
+    let xlabel = "";
+    if (chosenXAxis === "poverty") {
+      xlabel = "Poverty";
+      xpercentsign = "%";
+    } else if (chosenXAxis === "age"){
+      xlabel = "Age";
+    } else {
+      xlabel = "Income";
+    }
+  
+    let ypercentsign = "";
+    let ylabel = "";
+    if (chosenYAxis === "healthcare") {
+      ylabel = "Healthcare";
+      ypercentsign = "%";
+    } else if (chosenYAxis === "smokes"){
+      ylabel = "Smokes";
+      ypercentsign = "%";
+    } else {
+      ylabel = "Obesity";
+      ypercentsign = "%";
+    }
+
+    //   // Step 1: Initialize Tooltip
+    //   var toolTip = d3.tip()
+    //     .attr("class", "d3-tip")
+    //     // .offset([80, -60])
+    //   .html(function (d) {
+    //     if (chosenXAxis === "income") {
+    //       let incomelevel = formatter.format(d[chosenXAxis]);
+    //       return (`${d.state}<br>${xlabel}: ${incomelevel.substring(0, incomelevel.length - 3)}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`);
+    //     }
+    //     else {
+    //       return (`${d.state}<br>${xlabel}: ${d[chosenXAxis]}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`);
+    //     };
+    //   });
+
+    //   // Step 2: Create the tooltip in chartGroup.
+    //   circlesGroup.call(toolTip);
+
+    //   // Step 3: Create "mouseover" event listener to display tooltip
+    //   circlesGroup.on("mouseover", function(d) {
+    //     toolTip.show(d);
+    //   })
+    //   // Step 4: Create "mouseout" event listener to hide tooltip
+    //     .on("mouseout", function(d) {
+    //       toolTip.hide(d);
+    //     });
+      return circlesGroup;
+    };
+
+
+
+    /* Initialize tooltip */
+    // do one at a time: 
+    // let toolTip = d3.selectAll("circle")
+    //   .append("div")
+    //   .attr("class", "d3-tip")
+    //   // .offset([80, -60])
+    //   .html(function (d) {
+    //     if (chosenXAxis === "income") {
+    //       let incomelevel = formatter.format(d[chosenXAxis]);
+    //       return (`${d.state}<br>${xlabel}: ${incomelevel.substring(0, incomelevel.length - 3)}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`);
+    //     }
+    //     else {
+    //       return (`${d.state}<br>${xlabel}: ${d[chosenXAxis]}${xpercentsign}<br>${ylabel}: ${d[chosenYAxis]}${ypercentsign}`);
+    //     };
+    //   });
+
+      // circlesGroup.call(toolTip)
+
+      // d3.select("#circleBasicTooltip")
+      //   .on("mouseover", function(){return tooltip.style("visibility", "visible");})
+    // // mouseover event
+    // toolTip.on("mouseover", function(d){
+    //   toolTip.show(this);
+
+    // })
+    //   // onmouseout event
+    //   .on("mouseout", function(d){
+    //     circlesGroup.hide(this);
+    //   });
+  
+  // return circlesGroup;
+  // }
+
 export {chosenXAxis, chosenYAxis}
 
  
-
 
